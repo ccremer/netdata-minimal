@@ -4,6 +4,11 @@ image is intended as a base image for netdata custom plugins running as
 a microservice with a backend enabled (which is disabled by default, see
 the overriding section).
 
+This image is being pushed to Docker Hub whenever
+[firehol/netdata](https://hub.docker.com/r/firehol/netdata/) is updated.
+
+Note: The web UI of netdata does not show any charts, you will only see
+the footer and menu.
 
 ## What's in the box
 
