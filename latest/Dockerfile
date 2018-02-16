@@ -42,7 +42,9 @@ EXPOSE 19999
 
 CMD ["/entrypoint.sh"]
 
-USER netdata:netdata
+COPY ["entrypoint.sh", "overrides.ini", "defaults.ini", "/etc/netdata/"]
+RUN \
+    mv /etc/netdata/entrypoint.sh / && \
+    chown netdata:netdata /etc/netdata/*.ini
 
-COPY entrypoint.sh /
-COPY --chown=netdata:netdata ["overrides.ini", "defaults.ini", "/etc/netdata/"]
+USER netdata:netdata

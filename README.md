@@ -23,15 +23,14 @@ plugins are disabled using config options in `/etc/netdata/netdata.conf`
 Overriding netdata configuration is relatively easy. In your Dockerfile,
 either:
 - Replace `/etc/netdata/overrides.ini` with your file. Make sure user
-`netdata` can read the file (e.g. `COPY --chown=netdata:netdata
-your-overrides.ini /etc/netdata/overrides.ini`).
+`netdata` can read the file.
 - Append section and key/value pairs using echo in your `RUN`
 instructions, e.g:
 ```
 FROM braindoctor/netdata-minimal
 RUN \
-    echo "[plugins]
-    node.d = yes" >> /etc/netdata/overrides.ini
+    echo "[plugins]" >> /etc/netdata/overrides.ini
+    echo "python.d = yes" >> /etc/netdata/overrides.ini
 ```
 
 Whichever method you prefer, do NOT provide leading whitespace in your
