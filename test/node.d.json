@@ -1,0 +1,15 @@
+{
+  "modules_enable_all": false,
+
+  "modules": {
+    "named": {
+      "enabled": false
+    },
+    "sma_webbox": {
+      "enabled": true
+    },
+    "snmp": {
+      "enabled": true
+    }
+  }
+}
