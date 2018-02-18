@@ -4,7 +4,6 @@ ARG \
     NETDATA_VERSION="master"
 
 EXPOSE 19999
-VOLUME ["/etc/netdata/overrides"]
 CMD ["/entrypoint.sh"]
 
 COPY ["entrypoint.sh", "*.ini", "*.conf", "/etc/netdata/overrides/"]
@@ -27,6 +26,7 @@ RUN \
         pkg-config \
         ca-certificates \
         crudini \
+        jq \
         && \
     # Install netdata
     git clone https://github.com/firehol/netdata.git /usr/src/netdata && \

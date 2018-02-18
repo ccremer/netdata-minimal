@@ -17,6 +17,7 @@ the footer and menu.
 plugins are disabled using config options in `/etc/netdata/netdata.conf`
 * Python 2.7 (python2-minimal)
 * Crudini (for easy ini editing)
+* jq (for easy json editing)
 
 ## Overriding netdata configuration
 
