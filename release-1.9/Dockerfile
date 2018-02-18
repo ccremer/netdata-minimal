@@ -46,6 +46,4 @@ RUN \
     mv /etc/netdata/overrides/entrypoint.sh / && \
     chown -R netdata:netdata /etc/netdata && \
     mv /etc/netdata/overrides/*.conf /etc/netdata/ && \
-    ls -lah /etc/netdata && \
-    ls -lah /etc/netdata/overrides && \
     chmod +x /entrypoint.sh

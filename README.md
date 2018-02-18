@@ -56,5 +56,5 @@ file(s) by setting the proper permissions.
 
 ## Future Plans
 
-[ ] Move to Linux Alpine as soon as netdata is available as a stable
+- [ ] Move to Linux Alpine as soon as netdata is available as a stable
 [apk package](https://pkgs.alpinelinux.org/packages?name=netdata&branch=edge&arch=x86_64).
