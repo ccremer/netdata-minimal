@@ -3,6 +3,12 @@ FROM debian:stable-slim
 ARG \
     NETDATA_VERSION="tags/v1.9.0"
 
+EXPOSE 19999
+VOLUME ["/etc/netdata/overrides"]
+CMD ["/entrypoint.sh"]
+
+COPY ["entrypoint.sh", "*.ini", "*.conf", "/etc/netdata/overrides/"]
+
 RUN \
     export DEBIAN_FRONTEND='noninteractive' && \
     # Install dependencies
@@ -34,17 +40,12 @@ RUN \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/src/netdata && \
     # Symlink logs to stdout/err
-    ln -sf /dev/stdout /var/log/netdata/access.log && \
     ln -sf /dev/stdout /var/log/netdata/debug.log && \
-    ln -sf /dev/stderr /var/log/netdata/error.log
-
-EXPOSE 19999
-
-CMD ["/entrypoint.sh"]
-
-COPY ["entrypoint.sh", "overrides.ini", "defaults.ini", "/etc/netdata/"]
-RUN \
-    mv /etc/netdata/entrypoint.sh / && \
-    chown netdata:netdata /etc/netdata/*.ini
-
-USER netdata:netdata
+    ln -sf /dev/stderr /var/log/netdata/error.log && \
+    # Permissions & stuff
+    mv /etc/netdata/overrides/entrypoint.sh / && \
+    chown -R netdata:netdata /etc/netdata && \
+    mv /etc/netdata/overrides/*.conf /etc/netdata/ && \
+    ls -lah /etc/netdata && \
+    ls -lah /etc/netdata/overrides && \
+    chmod +x /entrypoint.sh

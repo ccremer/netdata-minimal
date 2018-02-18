@@ -22,22 +22,23 @@ plugins are disabled using config options in `/etc/netdata/netdata.conf`
 
 Overriding netdata configuration is relatively easy. In your Dockerfile,
 either:
-- Replace `/etc/netdata/overrides.ini` with your file. Make sure user
+- Replace `/etc/netdata/overrides/netdata.ini` with your file. Make sure user
 `netdata` can read the file.
 - Append section and key/value pairs using echo in your `RUN`
 instructions, e.g:
 ```
 FROM braindoctor/netdata-minimal
 RUN \
-    echo "[plugins]" >> /etc/netdata/overrides.ini
-    echo "python.d = yes" >> /etc/netdata/overrides.ini
+    echo "[plugins]" >> /etc/netdata/overrides/netdata.ini
+    echo "python.d = yes" >> /etc/netdata/overrides/netdata.ini
 ```
 
 Whichever method you prefer, do NOT provide leading whitespace in your
 ini file, or else parsing and merging will fail!
 
-As an alternative, you can mount `/etc/netdata/overrides.ini` from
-outside (permissions!).
+As an alternative, you can mount `/etc/netdata/overrides` from
+outside (permissions!), just make sure you have the changes from the
+original files before "overmounting" them.
 
 ## Installing/Enabling custom plugins
 
@@ -52,3 +53,8 @@ file(s) by setting the proper permissions.
 
 * `latest`: Most up-to-date netdata version.
 * `1.9`: Release 1.9.x of netdata.
+
+## Future Plans
+
+[ ] Move to Linux Alpine as soon as netdata is available as a stable
+[apk package](https://pkgs.alpinelinux.org/packages?name=netdata&branch=edge&arch=x86_64).
