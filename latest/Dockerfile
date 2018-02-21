@@ -1,49 +1,37 @@
-FROM debian:stable-slim
+FROM firehol/netdata:alpine
 
-ARG \
-    NETDATA_VERSION="master"
-
-EXPOSE 19999
 CMD ["/entrypoint.sh"]
 
-COPY ["entrypoint.sh", "*.ini", "*.conf", "/etc/netdata/overrides/"]
+WORKDIR /etc/netdata
+
+COPY ["entrypoint.sh", "*.ini", "*.json", "*.yml", "*.conf", "/etc/netdata/overrides/"]
 
 RUN \
-    export DEBIAN_FRONTEND='noninteractive' && \
-    # Install dependencies
-    apt-get update && \
-    apt-get upgrade -qqy && \
-    apt-get install --no-install-recommends -qqy \
-        zlib1g-dev \
-        uuid-dev \
-        gcc \
-        make \
-        git \
-        autoconf \
-        autoconf-archive \
-        autogen \
-        automake \
-        pkg-config \
+    apk --no-cache add \
         ca-certificates \
-        crudini \
-        jq \
+        py-pip \
+        curl \
         && \
-    # Install netdata
-    git clone https://github.com/firehol/netdata.git /usr/src/netdata && \
-    cd /usr/src/netdata && \
-    git checkout $NETDATA_VERSION && \
-    ./netdata-installer.sh --dont-start-it --dont-wait && \
-    cd / && \
-    # Cleanup
-    apt-get purge -y git gcc automake autogen make autoconf* && \
-    apt-get -y autoremove && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/src/netdata && \
-    # Symlink logs to stdout/err
-    ln -sf /dev/stdout /var/log/netdata/debug.log && \
-    ln -sf /dev/stderr /var/log/netdata/error.log && \
+    # Install crudini (not available as alpine pkg)
+    pip install --no-cache-dir crudini && \
+    apk del py-pip && \
+    mv overrides/entrypoint.sh / && \
+    chmod +x /entrypoint.sh /usr/bin/crudini && \
+    mv overrides/stream.conf /etc/netdata/ && \
     # Permissions & stuff
-    mv /etc/netdata/overrides/entrypoint.sh / && \
-    chown -R netdata:netdata /etc/netdata && \
-    mv /etc/netdata/overrides/*.conf /etc/netdata/ && \
-    chmod +x /entrypoint.sh
+    addgroup -g 101 -S netdata && \
+    adduser -S -H -s /bin/sh -u 101 -h /etc/netdata -G netdata netdata && \
+    chown -R netdata:netdata overrides && \
+    find /etc/netdata -type f -exec chmod 0640 -- {} + && \
+    find /usr/share/netdata -type f -exec chmod 0644 -- {} + && \
+    find /var/cache/netdata -type f -exec chmod 0660 -- {} + && \
+    find /var/lib/netdata -type f -exec chmod 0660 -- {} + && \
+    chmod 0755 /var/log/netdata /usr/share/netdata /usr/libexec/netdata /etc/netdata && \
+    chmod 0750 /var/lib/netdata /var/cache/netdata && \
+    # /etc/netdata normally belongs to root, but for overrides we need permissions
+    chown -R root:netdata /usr/share/netdata && \
+    chown -R netdata:netdata /var/lib/netdata /var/cache/netdata /etc/netdata /usr/share/netdata/web && \
+    chown -R netdata:root /var/log/netdata && \
+    chown -R root:root /usr/libexec/netdata
+
+USER netdata:netdata

@@ -1,21 +1,24 @@
 # netdata-minimal
 Minimal netdata installation with all plugins disabled by default. This
 image is intended as a base image for netdata custom plugins running as
-a microservice with a backend enabled (which is disabled by default, see
+a microservice with a backend or stream enabled (which is disabled by default, see
 the overriding section).
 
 This image is being pushed to Docker Hub whenever
 [firehol/netdata](https://hub.docker.com/r/firehol/netdata/) is updated.
 
-Note: The web UI of netdata does not show any charts, you will only see
-the footer and menu.
+**Note**: The web UI of netdata is disabled by default. You can enable it by
+setting env var `ENABLE_WEB=true`. Even then it does not show any charts,
+you will only see the footer and menu.
 
 ## What's in the box
 
-* Debian `stable-slim`
+* `1.9`: Debian `stable-slim`
+* `latest`: Alpine `edge`
 * Full netdata installation (latest git clone & compile), but the default
 plugins are disabled using config options in `/etc/netdata/netdata.conf`
 * Python 2.7 (python2-minimal)
+* On `latest`: nodejs
 * Crudini (for easy ini editing)
 * jq (for easy json editing)
 
@@ -52,10 +55,5 @@ file(s) by setting the proper permissions.
 
 ## Tags
 
-* `latest`: Most up-to-date netdata version.
+* `latest`: Most up-to-date netdata version, based on Alpine.
 * `1.9`: Release 1.9.x of netdata.
-
-## Future Plans
-
-- [ ] Move to Linux Alpine as soon as netdata is available as a stable
-[apk package](https://pkgs.alpinelinux.org/packages?name=netdata&branch=edge&arch=x86_64).
