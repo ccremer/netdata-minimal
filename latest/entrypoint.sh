@@ -82,6 +82,11 @@ if [[ ${N_ENABLE_NODE_D} == "yes" ]]; then
     crudini --inplace --set ${netdata_config} plugins node.d yes
 fi
 
+# Set the hostname
+if [[ -n ${N_HOSTNAME} ]]; then
+    crudini --inplace --set ${netdata_config} global hostname "${N_HOSTNAME}"
+fi
+
 execute_script "${post_start_script}"
 
 echo "Starting netdata as $(id)..."
