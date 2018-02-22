@@ -8,7 +8,7 @@ This image is being pushed to Docker Hub whenever
 [firehol/netdata](https://hub.docker.com/r/firehol/netdata/) is updated.
 
 **Note**: The web UI and health checks of netdata are disabled by default.
- Even if enable it (see env vars) then it does not show any charts,
+ Even if enabled (see env vars) then it does not show any charts,
 you will only see the footer and menu.
 
 ## How to get started
@@ -24,9 +24,10 @@ you will only see the footer and menu.
 * Full netdata installation (latest git clone & compile), but the default
 plugins are disabled using config options in `/etc/netdata/netdata.conf`
 * Python, and some pkgs: py-mysqldb, py-psycopg2, netcat-openbsd
-* Nodejs
+* Nodejs (without npm)
 * Crudini (for easy ini editing)
 * jq (for easy json editing)
+* merge-yaml-cli (for easy yaml editing)
 * bash (just 1 additional MB, but makes scripting so much easier)
 
 ## Environment variables

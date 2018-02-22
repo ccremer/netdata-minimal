@@ -10,13 +10,15 @@ RUN \
         py-pip \
         curl \
         bash \
+        nodejs-npm \
         && \
     # Install crudini (not available as alpine pkg)
     pip install --no-cache-dir crudini && \
+    npm install -g merge-yaml-cli && \
     ln -sf /bin/bash /bin/sh && \
-    apk del py-pip
+    apk del py-pip nodejs-npm
 
-COPY ["entrypoint.sh", "*.ini", "*.json", "pre-start.sh", "*.conf", "/etc/netdata/overrides/"]
+COPY ["entrypoint.sh", "*.ini", "*.json", "*.yml", "pre-start.sh", "post-start.sh", "*.conf", "/etc/netdata/overrides/"]
 
 RUN \
     mv overrides/entrypoint.sh / && \

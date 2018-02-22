@@ -40,10 +40,22 @@ override_json() {
 }
 
 overwrite_conf() {
+    f="$(basename ${1%.*})"
     dest="${config_dir}/${f}.conf"
-    src="$(basename ${1%.*})"
+    src="${config_dir}/overrides/${f}.conf"
     echo "Overwriting ${dest} with ${src}"
     cp "${src}" "${dest}"
+}
+
+override_yaml() {
+    f="$(basename ${1%.*})"
+    dest="${config_dir}/${f}.conf"
+    src="${config_dir}/overrides/${f}.yml"
+    orig="${dest}.orig"
+    mv "${dest}" "${orig}"
+    merge-yaml -i "${orig}" ${src} -o ${dest}
+    echo "# This file has been written with merge-yaml, which removes helpful comments." >> ${dest}
+    echo "# The original unmodified content is in ${orig}" >> ${dest}
 }
 
 # ---------------------------------------------------------
@@ -54,6 +66,7 @@ execute_script "${pre_start_script}"
 find ${config_dir}/overrides/ -name "*.conf" -type f | while read file; do overwrite_conf "${file}"; done
 find ${config_dir}/overrides/ -name "*.ini"  -type f | while read file; do override_ini   "${file}"; done
 find ${config_dir}/overrides/ -name "*.json" -type f | while read file; do override_json  "${file}"; done
+find ${config_dir}/overrides/ -name "*.yml"  -type f | while read file; do override_yaml  "${file}"; done
 
 # Enable netdata web
 if [[ "${N_ENABLE_WEB}" == "yes" ]]; then

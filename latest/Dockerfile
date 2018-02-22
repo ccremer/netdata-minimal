@@ -12,11 +12,14 @@ RUN \
         py-pip \
         curl \
         bash \
+        nodejs-npm
         && \
     ln -sf /bin/bash /bin/sh && \
     # Install crudini (not available as alpine pkg)
     pip install --no-cache-dir crudini && \
-    apk del py-pip && \
+    # Install merge-yaml-cli
+    npm install -g merge-yaml-cli && \
+    apk del py-pip nodejs-npm && \
     mv overrides/entrypoint.sh / && \
     chmod +x /entrypoint.sh /usr/bin/crudini && \
     mv overrides/stream.conf /etc/netdata/ && \
