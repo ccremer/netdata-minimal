@@ -57,3 +57,10 @@ file(s) by setting the proper permissions.
 
 * `latest`: Most up-to-date netdata version, based on Alpine.
 * `1.9`: Release 1.9.x of netdata.
+
+## Netdata user
+
+For `latest`, this image has been built so that user `netdata (101:101)`
+can run netdata. However, in this Dockerfile it is still root, assuming
+that you will install additional stuff as root. It is recommended that you
+add `USER netdata:netdata` somewhere in your derived Dockerfile.

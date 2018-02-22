@@ -33,5 +33,3 @@ RUN \
     chown -R netdata:netdata /var/lib/netdata /var/cache/netdata /etc/netdata /usr/share/netdata/web && \
     chown -R netdata:root /var/log/netdata && \
     chown -R root:root /usr/libexec/netdata
-
-USER netdata:netdata
