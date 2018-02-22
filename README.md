@@ -7,20 +7,40 @@ the overriding section).
 This image is being pushed to Docker Hub whenever
 [firehol/netdata](https://hub.docker.com/r/firehol/netdata/) is updated.
 
-**Note**: The web UI of netdata is disabled by default. You can enable it by
-setting env var `ENABLE_WEB=true`. Even then it does not show any charts,
+**Note**: The web UI and health checks of netdata are disabled by default.
+ Even if enable it (see env vars) then it does not show any charts,
 you will only see the footer and menu.
+
+## How to get started
+
+1. Declare `FROM braindoctor/netdata-minimal` in your Dockerfile
+2. Override the config (see below)
+3. Enable the web service for debugging purposes
+4. Declare `USER netdata:netdata` at the end of your Dockerfile (recommended)
 
 ## What's in the box
 
-* `1.9`: Debian `stable-slim`
-* `latest`: Alpine `edge`
+* Alpine edge
 * Full netdata installation (latest git clone & compile), but the default
 plugins are disabled using config options in `/etc/netdata/netdata.conf`
-* Python 2.7 (python2-minimal)
-* On `latest`: nodejs
+* Python, and some pkgs: py-mysqldb, py-psycopg2, netcat-openbsd
+* Nodejs
 * Crudini (for easy ini editing)
 * jq (for easy json editing)
+* bash (just 1 additional MB, but makes scripting so much easier)
+
+## Environment variables
+
+Some basic settings can be applied without having to override them in files.
+
+Key | Default value | Accepted values | Description
+--- | ---           | ---             | ---
+`N_ENABLE_WEB`             | `no` | `yes` or `no`  | Set it to `yes` to enable the web UI
+`N_ENABLE_HEALTH`          | `no` | `yes` or `no`  | Set it to `yes` to enable health
+`N_ENABLE_PYTHON_D`        | `no` | `yes` or `no`  | Set it to `yes` to enable python plugins
+`N_ENABLE_NODE_D`          | `no` | `yes` or `no`  | Set it to `yes` to enable nodejs plugins
+`N_STREAM_DESTINATION`     | (unset) | DNS or IP   | The netdata streaming master. Requires `N_STREAM_API_KEY`
+`N_STREAM_API_KEY`         | (unset) | uuid        | The API key to access the master. Requires `N_STREAM_DESTINATION`
 
 ## Overriding netdata configuration
 
@@ -41,8 +61,7 @@ Whichever method you prefer, do NOT provide leading whitespace in your
 ini file, or else parsing and merging will fail!
 
 As an alternative, you can mount `/etc/netdata/overrides` from
-outside (permissions!), just make sure you have the changes from the
-original files before "overmounting" them.
+outside (permissions!).
 
 ## Installing/Enabling custom plugins
 
@@ -56,7 +75,6 @@ file(s) by setting the proper permissions.
 ## Tags
 
 * `latest`: Most up-to-date netdata version, based on Alpine.
-* `1.9`: Release 1.9.x of netdata.
 
 ## Netdata user
 

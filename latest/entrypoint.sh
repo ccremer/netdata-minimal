@@ -1,6 +1,9 @@
 #!/bin/sh
 
 config_dir="/etc/netdata"
+stream_config="${config_dir}/stream.conf"
+netdata_config="${config_dir}/netdata.conf"
+
 pre_start_script="${config_dir}/overrides/pre-start.sh"
 post_start_script="${config_dir}/overrides/post-start.sh"
 
@@ -36,16 +39,47 @@ override_json() {
     jq -s add ${dest} ${src} > ${dest}
 }
 
+overwrite_conf() {
+    dest="${config_dir}/${f}.conf"
+    src="$(basename ${1%.*})"
+    echo "Overwriting ${dest} with ${src}"
+    cp "${src}" "${dest}"
+}
+
 # ---------------------------------------------------------
 # The actual work
 
 execute_script "${pre_start_script}"
 
-find ${config_dir}/overrides/ -name "*.ini"  -type f | while read file; do override_ini  "${file}"; done
-find ${config_dir}/overrides/ -name "*.json" -type f | while read file; do override_json "${file}"; done
+find ${config_dir}/overrides/ -name "*.conf" -type f | while read file; do overwrite_conf "${file}"; done
+find ${config_dir}/overrides/ -name "*.ini"  -type f | while read file; do override_ini   "${file}"; done
+find ${config_dir}/overrides/ -name "*.json" -type f | while read file; do override_json  "${file}"; done
 
-if [[ "${ENABLE_WEB:-false}" == "true" ]]; then
-    crudini --inplace --set ${config_dir}/netdata.conf web mode static-threaded
+# Enable netdata web
+if [[ "${N_ENABLE_WEB}" == "yes" ]]; then
+    crudini --inplace --set ${netdata_config} web mode static-threaded
+fi
+
+# Enable netdata health
+if [[ "${N_ENABLE_HEALTH}" == "yes" ]]; then
+    crudini --inplace --set ${netdata_config} health enabled yes
+fi
+
+# Enable netdata streaming to a master
+if [[ -n ${N_STREAM_DESTINATION} && -n ${N_STREAM_API_KEY} ]]; then
+    crudini --inplace --set ${stream_config} stream enabled yes
+    crudini --inplace --set ${stream_config} stream destination "${N_STREAM_DESTINATION}"
+    crudini --inplace --set ${stream_config} stream "api key" "${N_STREAM_API_KEY}"
+fi
+
+# Enable python plugins
+if [[ ${N_ENABLE_PYTHON_D} == "yes" ]]; then
+    crudini --inplace --set ${netdata_config} plugins python.d yes
+fi
+
+# Enable nodejs plugins
+if [[ ${N_ENABLE_NODE_D} == "yes" ]]; then
+    crudini --inplace --set ${netdata_config} plugins node.d yes
 fi
 
 execute_script "${post_start_script}"
