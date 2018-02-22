@@ -12,7 +12,7 @@ RUN \
         py-pip \
         curl \
         bash \
-        nodejs-npm
+        nodejs-npm \
         && \
     ln -sf /bin/bash /bin/sh && \
     # Install crudini (not available as alpine pkg)
