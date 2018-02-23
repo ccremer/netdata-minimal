@@ -6,7 +6,7 @@ WORKDIR /etc/netdata
 
 USER root:root
 
-COPY ["entrypoint.sh", "*.ini", "*.json", "*.conf", "/etc/netdata/overrides/"]
+COPY ["entrypoint.sh", "*.ini", "*.conf", "/etc/netdata/overrides/"]
 
 RUN \
     apk --no-cache add \
@@ -21,12 +21,18 @@ RUN \
     pip install --no-cache-dir crudini && \
     # Install merge-yaml-cli
     npm install -g merge-yaml-cli && \
+    # Cleanup
     apk del py-pip nodejs-npm && \
+    # Prepare scripts
     mv overrides/entrypoint.sh / && \
     chmod +x /entrypoint.sh /usr/bin/crudini && \
+    mkdir -p /etc/netdata/post-start.d /etc/netdata/pre-start.d && \
+    # Apply config
     mv overrides/stream.conf /etc/netdata/ && \
     crudini --inplace --merge netdata.conf < overrides/netdata.ini && \
     cp overrides/stream.ini overrides/netdata.ini
+
+COPY ["pre-start.d/*.sh", "/etc/netdata/pre-start.d/"]
 
 ENV \
     N_ENABLE_WEB="no" \

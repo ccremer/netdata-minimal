@@ -1,11 +1,11 @@
 #!/bin/sh
 
+# ---------------------------------------------------------
+# Variables
+
 config_dir="/etc/netdata"
 stream_config="${config_dir}/stream.conf"
 netdata_config="${config_dir}/netdata.conf"
-
-pre_start_script="${config_dir}/overrides/pre-start.sh"
-post_start_script="${config_dir}/overrides/post-start.sh"
 
 # ---------------------------------------------------------
 # Functions
@@ -14,7 +14,7 @@ execute_script() {
     script="${1}"
     if [[ -f "${script}" ]]; then
         echo "Executing ${script}"
-        sh ${script}
+        bash ${script}
         out=$?
         if [[ ${out} -gt 0 ]]; then
             echo "${script} exited with exit code ${out}"
@@ -61,46 +61,12 @@ override_yaml() {
 # ---------------------------------------------------------
 # The actual work
 
-execute_script "${pre_start_script}"
+find ${config_dir}/pre-start.d/ -name "*.sh"  -type f | while read file; do execute_script "${file}"; done
+find ${config_dir}/overrides/ -name "*.conf"  -type f | while read file; do overwrite_conf "${file}"; done
+find ${config_dir}/overrides/ -name "*.ini"   -type f | while read file; do override_ini   "${file}"; done
+find ${config_dir}/overrides/ -name "*.json"  -type f | while read file; do override_json  "${file}"; done
+find ${config_dir}/overrides/ -name "*.yml"   -type f | while read file; do override_yaml  "${file}"; done
+find ${config_dir}/post-start.d/ -name "*.sh" -type f | while read file; do execute_script "${file}"; done
 
-find ${config_dir}/overrides/ -name "*.conf" -type f | while read file; do overwrite_conf "${file}"; done
-find ${config_dir}/overrides/ -name "*.ini"  -type f | while read file; do override_ini   "${file}"; done
-find ${config_dir}/overrides/ -name "*.json" -type f | while read file; do override_json  "${file}"; done
-find ${config_dir}/overrides/ -name "*.yml"  -type f | while read file; do override_yaml  "${file}"; done
-
-# Enable netdata web
-if [[ "${N_ENABLE_WEB}" == "yes" ]]; then
-    crudini --inplace --set ${netdata_config} web mode static-threaded
-fi
-
-# Enable netdata health
-if [[ "${N_ENABLE_HEALTH}" == "yes" ]]; then
-    crudini --inplace --set ${netdata_config} health enabled yes
-fi
-
-# Enable netdata streaming to a master
-if [[ -n ${N_STREAM_DESTINATION} && -n ${N_STREAM_API_KEY} ]]; then
-    crudini --inplace --set ${stream_config} stream enabled yes
-    crudini --inplace --set ${stream_config} stream destination "${N_STREAM_DESTINATION}"
-    crudini --inplace --set ${stream_config} stream "api key" "${N_STREAM_API_KEY}"
-fi
-
-# Enable python plugins
-if [[ ${N_ENABLE_PYTHON_D} == "yes" ]]; then
-    crudini --inplace --set ${netdata_config} plugins python.d yes
-fi
-
-# Enable nodejs plugins
-if [[ ${N_ENABLE_NODE_D} == "yes" ]]; then
-    crudini --inplace --set ${netdata_config} plugins node.d yes
-fi
-
-# Set the hostname
-if [[ -n ${N_HOSTNAME} ]]; then
-    crudini --inplace --set ${netdata_config} global hostname "${N_HOSTNAME}"
-fi
-
-execute_script "${post_start_script}"
-
-echo "Starting netdata as $(id)..."
+echo "Preparation finished. Starting netdata as $(id)..."
 exec /usr/sbin/netdata -D

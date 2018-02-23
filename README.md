@@ -41,7 +41,8 @@ Key | Default value | Accepted values | Description
 `N_ENABLE_PYTHON_D`        | `no` | `yes` or `no`  | Set it to `yes` to enable python plugins.
 `N_ENABLE_NODE_D`          | `no` | `yes` or `no`  | Set it to `yes` to enable nodejs plugins.
 `N_STREAM_DESTINATION`     | (unset) | DNS or IP   | The netdata streaming master. Requires `N_STREAM_API_KEY`.
-`N_STREAM_API_KEY`         | (unset) | uuid        | The API key to access the master. Requires `N_STREAM_DESTINATION`.
+`N_STREAM_API_KEY`         | (unset) | uuid        | The API key for streaming.
+`N_STREAM_MASTER_MEMORY`   | (unset) | `save`, `ram`, `none` or `map` | The memory mode of the netdata master (enabled by settings this). Requires `N_STREAM_API_KEY`.
 `N_HOSTNAME`               | (unset) | string      | The hostname for netdata (affects streaming). Default is container hostname.
 
 ## Overriding netdata configuration
@@ -50,6 +51,7 @@ Overriding netdata configuration is relatively easy. In your Dockerfile,
 either:
 - Replace `/etc/netdata/overrides/netdata.ini` with your file. Make sure user
 `netdata` can read the file.
+- Mount `/etc/netdata/overrides` from outside (permissions!).
 - Append section and key/value pairs using echo in your `RUN`
 instructions, e.g:
 ```
@@ -62,8 +64,7 @@ RUN \
 Whichever method you prefer, do NOT provide leading whitespace in your
 ini file, or else parsing and merging will fail!
 
-As an alternative, you can mount `/etc/netdata/overrides` from
-outside (permissions!).
+As an alternative, you can 
 
 ## Installing/Enabling custom plugins
 

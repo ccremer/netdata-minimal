@@ -20,15 +20,19 @@ RUN \
     ln -sf /bin/bash /bin/sh && \
     apk del py-pip nodejs-npm
 
-COPY ["entrypoint.sh", "*.ini", "*.json", "*.yml", "pre-start.sh", "post-start.sh", "*.conf", "/etc/netdata/overrides/"]
+COPY ["entrypoint.sh", "*.ini", "*.json", "*.yml", "*.conf", "/etc/netdata/overrides/"]
 
 RUN \
     mv overrides/entrypoint.sh / && \
     chmod +x /entrypoint.sh /usr/bin/crudini && \
+    mkdir -p /etc/netdata/post-start.d /etc/netdata/pre-start.d && \
     mv overrides/stream.conf /etc/netdata/ && \
     crudini --inplace --merge netdata.conf < overrides/netdata.ini && \
     cp overrides/stream.ini overrides/netdata.ini && \
     ls -lah overrides
+
+COPY ["pre-start.d/*.sh", "/etc/netdata/pre-start.d/"]
+COPY ["post-start.d/*.sh", "/etc/netdata/post-start.d/"]
 
 ENV \
     N_ENABLE_WEB="no" \
