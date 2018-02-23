@@ -79,6 +79,12 @@ In your Dockerfile, install them as you would on a normal system:
 file(s) by setting the proper permissions.
 4. Build & Test.
 
+## Installing custom scripts
+
+Provide any shell scripts ending with `.sh` in `/etc/netdata/pre-start.d` or `/etc/netdata/post-start.d`.
+Pre-start scripts are executed before merging/overwriting files from `/etc/netdata/overrides` in alphabetical order.
+Post-start scripts after merging but before starting netdata. The scripts will be called with `bash`.
+
 ## Tags
 
 * `latest`: Most up-to-date netdata version, based on Alpine.
