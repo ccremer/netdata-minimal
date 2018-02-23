@@ -37,4 +37,5 @@ COPY ["post-start.d/*.sh", "/etc/netdata/post-start.d/"]
 ENV \
     N_ENABLE_WEB="no" \
     N_ENABLE_PYTHON_D="no" \
-    N_ENABLE_NODE_D="no"
+    N_ENABLE_NODE_D="no" \
+    N_MEMORY_MODE="save"

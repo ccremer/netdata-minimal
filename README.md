@@ -40,14 +40,15 @@ Some basic settings can be applied without having to override them in files.
 
 Key | Default value | Accepted values | Description
 --- | ---           | ---             | ---
-`N_ENABLE_WEB`             | `no` | `yes` or `no`  | Set it to `yes` to enable the web UI.
-`N_ENABLE_HEALTH`          | `no` | `yes` or `no`  | Set it to `yes` to enable health.
-`N_ENABLE_PYTHON_D`        | `no` | `yes` or `no`  | Set it to `yes` to enable python plugins.
-`N_ENABLE_NODE_D`          | `no` | `yes` or `no`  | Set it to `yes` to enable nodejs plugins.
-`N_STREAM_DESTINATION`     | (unset) | DNS or IP   | The netdata streaming master. Requires `N_STREAM_API_KEY`.
-`N_STREAM_API_KEY`         | (unset) | uuid        | The API key for streaming.
-`N_STREAM_MASTER_MEMORY`   | (unset) | `save`, `ram`, `none` or `map` | The memory mode of the netdata master (enabled by settings this). Requires `N_STREAM_API_KEY`.
-`N_HOSTNAME`               | (unset) | string      | The hostname for netdata (affects streaming). Default is container hostname.
+`N_ENABLE_WEB`             | `no` | `yes` or `no`    | Set it to `yes` to enable the web UI.
+`N_ENABLE_HEALTH`          | `no` | `yes` or `no`    | Set it to `yes` to enable health.
+`N_ENABLE_PYTHON_D`        | `no` | `yes` or `no`    | Set it to `yes` to enable python plugins.
+`N_ENABLE_NODE_D`          | `no` | `yes` or `no`    | Set it to `yes` to enable nodejs plugins.
+`N_STREAM_DESTINATION`     | (unset) | DNS or IP     | The netdata streaming master. Requires `N_STREAM_API_KEY`.
+`N_STREAM_API_KEY`         | (unset) | uuid          | The API key for streaming.
+`N_STREAM_MASTER_MEMORY`   | (unset) | `save`, `ram`, `none` or `map` | The memory mode of the netdata slaves (enables master). Requires `N_STREAM_API_KEY`.
+`N_HOSTNAME`               | (unset) | string        | The hostname for netdata (affects streaming). Default is container hostname.
+`N_MEMORY_MODE`            | `save` | `save`, `ram`, `none` or `map` | The memory mode of this node.
 
 ## Overriding netdata configuration
 
