@@ -11,6 +11,10 @@ This image is being pushed to Docker Hub whenever
  Even if enabled (see env vars) then it does not show any charts,
 you will only see the footer and menu.
 
+### PLEASE HOLD ON BEFORE USING NETDATA USER
+
+Until https://github.com/firehol/netdata/pull/3463 is merged, only user root is supported.
+
 ## How to get started
 
 1. Declare `FROM braindoctor/netdata-minimal` in your Dockerfile
