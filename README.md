@@ -42,6 +42,7 @@ Key | Default value | Accepted values | Description
 `N_STREAM_DESTINATION`     | (unset) | DNS or IP     | The netdata streaming master. Requires `N_STREAM_API_KEY`.
 `N_STREAM_API_KEY`         | (unset) | uuid          | The API key for streaming.
 `N_STREAM_MASTER_MEMORY`   | (unset) | `save`, `ram`, `none` or `map` | The memory mode of the netdata slaves (enables master). Requires `N_STREAM_API_KEY`.
+`N_STREAM_MASTER_HEALTH`   | `auto` | `yes`, `auto`, or `no` | Whether health checks are enabled for slaves. `auto` means `yes, if connected`.
 `N_HOSTNAME`               | (unset) | string        | The hostname for netdata (affects streaming). Default is container hostname.
 `N_MEMORY_MODE`            | `save` | `save`, `ram`, `none` or `map` | The memory mode of this node.
 
