@@ -7,3 +7,8 @@ netdata_config="${config_dir}/netdata.conf"
 if [[ "${N_ENABLE_WEB}" == "yes" ]]; then
     crudini --inplace --set ${netdata_config} web mode static-threaded
 fi
+
+# Disable web access log
+if [[ "${N_DISABLE_WEB_LOG}" == "yes" ]]; then
+    rm -f /var/log/netdata/access.log
+fi

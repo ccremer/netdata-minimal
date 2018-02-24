@@ -49,6 +49,7 @@ Key | Default value | Accepted values | Description
 `N_STREAM_MASTER_MEMORY`   | (unset) | `save`, `ram`, `none` or `map` | The memory mode of the netdata slaves (enables master). Requires `N_STREAM_API_KEY`.
 `N_HOSTNAME`               | (unset) | string        | The hostname for netdata (affects streaming). Default is container hostname.
 `N_MEMORY_MODE`            | `save` | `save`, `ram`, `none` or `map` | The memory mode of this node.
+`N_DISABLE_WEB_LOG`        | (unset) | `yes` or `no` | Set it to `yes` to disable the web access log.
 
 ## Overriding netdata configuration
 
