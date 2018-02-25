@@ -1,24 +1,15 @@
-FROM firehol/netdata:alpine as builder
-
-COPY compile-fping.sh /
-
-RUN \
-    sh compile-fping.sh
-
 FROM firehol/netdata:alpine
 
 CMD ["/entrypoint.sh"]
 
 WORKDIR /etc/netdata
 
-COPY --from=builder /usr/local/bin/fping /usr/local/bin/fping
 COPY ["entrypoint.sh", "*.ini", "*.conf", "/etc/netdata/overrides/"]
 
 RUN \
     apk --no-cache add \
         ca-certificates \
         py-pip \
-        curl \
         bash \
         nodejs-npm \
         && \
@@ -33,7 +24,6 @@ RUN \
     mv overrides/entrypoint.sh / && \
     chmod +x /entrypoint.sh /usr/bin/crudini && \
     mkdir -p /etc/netdata/post-start.d /etc/netdata/pre-start.d && \
-    chmod 4755 /usr/local/bin/fping && \
     # Apply config
     mv overrides/stream.conf /etc/netdata/ && \
     crudini --inplace --merge netdata.conf < overrides/netdata.ini && \

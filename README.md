@@ -88,4 +88,5 @@ Post-start scripts after merging but before starting netdata. The scripts will b
 
 ## Netdata user
 
-This image has been built so that user `netdata` can run netdata.
+This image has been built so that user `netdata` can run netdata. Initially, the container will start as root,
+but then switches user. 

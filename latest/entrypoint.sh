@@ -68,5 +68,5 @@ find ${config_dir}/overrides/ -name "*.json"  -type f | while read file; do over
 find ${config_dir}/overrides/ -name "*.yml"   -type f | while read file; do override_yaml  "${file}"; done
 find ${config_dir}/post-start.d/ -name "*.sh" -type f | while read file; do execute_script "${file}"; done
 
-echo "Preparation finished. Starting netdata as $(id)..."
+echo "Preparation finished. Starting netdata..."
 exec /usr/sbin/netdata -D
