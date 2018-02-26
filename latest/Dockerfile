@@ -1,10 +1,10 @@
 FROM firehol/netdata:alpine
 
-CMD ["/entrypoint.sh"]
+CMD ["/netdata.sh"]
 
 WORKDIR /etc/netdata
 
-COPY ["entrypoint.sh", "*.ini", "*.conf", "/etc/netdata/overrides/"]
+COPY ["netdata.sh", "*.ini", "*.conf", "/etc/netdata/overrides/"]
 
 RUN \
     apk --no-cache add \
@@ -21,8 +21,8 @@ RUN \
     # Cleanup
     apk del py-pip nodejs-npm && \
     # Prepare scripts
-    mv overrides/entrypoint.sh / && \
-    chmod +x /entrypoint.sh /usr/bin/crudini && \
+    mv overrides/netdata.sh / && \
+    chmod +x /netdata.sh /usr/bin/crudini && \
     mkdir -p /etc/netdata/post-start.d /etc/netdata/pre-start.d && \
     # Apply config
     mv overrides/stream.conf /etc/netdata/ && \

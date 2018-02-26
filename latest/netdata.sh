@@ -13,11 +13,11 @@ netdata_config="${config_dir}/netdata.conf"
 execute_script() {
     script="${1}"
     if [[ -f "${script}" ]]; then
-        echo "Executing ${script}"
+        log "Executing ${script}"
         bash ${script}
         out=$?
         if [[ ${out} -gt 0 ]]; then
-            echo "${script} exited with exit code ${out}"
+            log "${script} exited with exit code ${out}"
             exit ${out}
         fi
     fi
@@ -27,7 +27,7 @@ override_ini() {
     f="$(basename ${1%.*})"
     dest="${config_dir}/${f}.conf"
     src="${config_dir}/overrides/${f}.ini"
-    echo "Overriding ${dest} with ${src}"
+    log "Overriding ${dest} with ${src}"
     crudini --inplace --merge ${dest} < ${src}
 }
 
@@ -35,7 +35,7 @@ override_json() {
     f="$(basename ${1%.*})"
     dest="${config_dir}/${f}.conf"
     src="${config_dir}/overrides/${f}.json"
-    echo "Overriding ${dest} with ${src}"
+    log "Overriding ${dest} with ${src}"
     jq -s add ${dest} ${src} > ${dest}
 }
 
@@ -43,7 +43,7 @@ overwrite_conf() {
     f="$(basename ${1%.*})"
     dest="${config_dir}/${f}.conf"
     src="${config_dir}/overrides/${f}.conf"
-    echo "Overwriting ${dest} with ${src}"
+    log "Overwriting ${dest} with ${src}"
     cp "${src}" "${dest}"
 }
 
@@ -58,6 +58,10 @@ override_yaml() {
     echo "# The original unmodified content is in ${orig}" >> ${dest}
 }
 
+log() {
+    echo "[netdata] ${1}"
+}
+
 # ---------------------------------------------------------
 # The actual work
 
@@ -68,5 +72,5 @@ find ${config_dir}/overrides/ -name "*.json"  -type f | while read file; do over
 find ${config_dir}/overrides/ -name "*.yml"   -type f | while read file; do override_yaml  "${file}"; done
 find ${config_dir}/post-start.d/ -name "*.sh" -type f | while read file; do execute_script "${file}"; done
 
-echo "Preparation finished. Starting netdata..."
+log "Preparation finished. Starting netdata..."
 exec /usr/sbin/netdata -D
