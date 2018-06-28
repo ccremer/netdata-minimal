@@ -17,6 +17,8 @@ RUN \
         python-pip \
         nodejs \
         && \
+    # Cleanup
+    apt-get clean && \
     ln -sf /bin/bash /bin/sh && \
     # Install crudini
     pip install --no-cache-dir setuptools && \
@@ -24,9 +26,6 @@ RUN \
     # Install merge-yaml-cli
     npm config set unsafe-perm true && \
     npm install -g merge-yaml-cli && \
-    # Cleanup
-    apt-get purge python-pip npm && \
-    apt-get clean && \
     # Prepare scripts
     mv overrides/netdata.sh / && \
     chmod +x /netdata.sh /usr/local/bin/crudini && \
