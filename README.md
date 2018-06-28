@@ -85,6 +85,7 @@ Post-start scripts after merging but before starting netdata. The scripts will b
 ## Tags
 
 * `latest`: Most up-to-date netdata version, based on Alpine.
+* `armv7hf`: An image for armhf, e.g. a raspberry pi (rpi). 
 
 ## Netdata user
 
