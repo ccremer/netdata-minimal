@@ -16,7 +16,11 @@ RUN \
         ca-certificates \
         python-pip \
         nodejs \
+        # for fping:
+        libcap2-bin \
         && \
+    curl -sL -o /var/cache/apt/archives/fping_armhf.deb http://ftp.uk.debian.org/debian/pool/main/f/fping/fping_4.0-6_armhf.deb && \
+    dpkg -i /var/cache/apt/archives/fping_armhf.deb && \
     # Cleanup
     apt-get clean && \
     ln -sf /bin/bash /bin/sh && \
