@@ -23,7 +23,6 @@ RUN \
     dpkg -i /var/cache/apt/archives/fping_armhf.deb && \
     # Cleanup
     apt-get clean && \
-    ln -sf /bin/bash /bin/sh && \
     # Install crudini
     pip install --no-cache-dir setuptools && \
     pip install --no-cache-dir crudini && \
