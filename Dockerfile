@@ -1,5 +1,7 @@
-FROM firehol/netdata:alpine
+ARG ARCH
+FROM firehol/netdata:${ARCH}
 
+ENTRYPOINT ["/bin/bash"]
 CMD ["/netdata.sh"]
 
 WORKDIR /etc/netdata
@@ -11,13 +13,15 @@ RUN \
         ca-certificates \
         py-pip \
         bash \
-        nodejs-npm \
+        npm \
         && \
     ln -sf /bin/bash /bin/sh && \
     # Install crudini (not available as alpine pkg)
+    pip install --upgrade pip && \
     pip install --no-cache-dir crudini && \
     # Install merge-yaml-cli
-    npm install -g merge-yaml-cli && \
+    # https://medium.com/@aguidrevitch/when-installation-of-global-package-using-npm-inside-docker-fails-b551b5dda389
+    npm install -g merge-yaml-cli --unsafe-perm && \
     # Cleanup
     apk del py-pip nodejs-npm && \
     # Prepare scripts
