@@ -3,8 +3,7 @@ Minimal netdata installation with all plugins disabled by default. This
 image is intended as a base image for netdata custom plugins running as
 a microservice with a backend or stream enabled (which is disabled by default, see below).
 
-This image is being pushed to Docker Hub whenever
-[firehol/netdata](https://hub.docker.com/r/firehol/netdata/) is updated.
+This image is being weekly built and pushed to Docker Hub.
 
 **Note**: The web UI and health checks of netdata are disabled by default.
  Even if enabled (see env vars) then it does not show any charts,
@@ -65,8 +64,6 @@ RUN \
 Whichever method you prefer, do NOT provide leading whitespace in your
 ini file, or else parsing and merging will fail!
 
-As an alternative, you can 
-
 ## Installing/Enabling custom plugins
 
 In your Dockerfile, install them as you would on a normal system:
@@ -84,10 +81,14 @@ Post-start scripts after merging but before starting netdata. The scripts will b
 
 ## Tags
 
-* `latest`: Most up-to-date netdata version, based on Alpine.
-* `armv7hf`: An image for armhf, e.g. a raspberry pi (rpi). 
+All tags are based on Multi-Arch Alpine
+
+* `latest`, equals `amd64`
+* `armhf`
+* `i386`
+* `aarch64`
 
 ## Netdata user
 
-This image has been built so that user `netdata` can run netdata. Initially, the container will start as root,
-but then switches user. 
+The official firehol/netdata base image has been built so that user `netdata` can run netdata. Initially, the container 
+will start as root, but then switches user. 
