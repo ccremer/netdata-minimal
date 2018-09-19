@@ -1,13 +1,13 @@
 # netdata-minimal
 Minimal netdata installation with all plugins disabled by default. This
 image is intended as a base image for netdata custom plugins running as
-a microservice with a backend or stream enabled (which is disabled by default, see below).
+a microservice with a backend or stream enabled (which is disabled by default, see below). Minimal as in minimal plugins enabled, not minimal in size!
 
 This image is being weekly built and pushed to Docker Hub.
 
 **Note**: The web UI and health checks of netdata are disabled by default.
  Even if enabled (see env vars) then it does not show any charts,
-you will only see the footer and menu.
+you will only see the footer and menu. Unless you activate plugins explicitly, ofc.
 
 ## How to get started
 
