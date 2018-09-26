@@ -1,5 +1,5 @@
 ARG ARCH
-FROM firehol/netdata:${ARCH}
+FROM netdata/netdata:${ARCH}
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["/netdata.sh"]
