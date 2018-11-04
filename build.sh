@@ -24,7 +24,7 @@ docker run --rm --privileged multiarch/qemu-user-static:register --reset
 for ARCH in armhf amd64 i386 aarch64; do
     image="${REPOSITORY}:${ARCH}${VERSION}"
     echo "Building: ARCH=${ARCH}, tag=${image}"
-    docker build --build-arg ARCH="${ARCH}" --tag ${image}
+    docker build --build-arg ARCH="${ARCH}" --tag "${image}" .
     fail_on_error $? "Error building ${image}, check the output above!"
 done
 
@@ -56,6 +56,6 @@ done
 # Push latest
 image="${REPOSITORY}:latest"
 echo "Pushing image: ${image}"
-docker push ${image}
+docker push "${image}"
 fail_on_error $? "Error pushing ${image}, check the output above!"
 
